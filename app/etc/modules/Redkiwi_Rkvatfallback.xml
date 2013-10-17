@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Redkiwi_Rkvatfallback>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Redkiwi_Rkvatfallback>
+    </modules>
+</config>
