@@ -18,4 +18,14 @@
 			</customer>
         </helpers>
     </global>
+
+    <default>
+        <customer>
+            <vat_services>
+                <vies_validation>1</vies_validation>
+                <isvat_validation>1</isvat_validation>
+                <regex_validation>1</regex_validation>
+            </vat_services>
+        </customer>
+    </default>
 </config>

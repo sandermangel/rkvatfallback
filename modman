@@ -1,0 +1,5 @@
+README.md README.md
+app/etc/modules/Redkiwi_Rkvatfallback.xml app/etc/modules/Redkiwi_Rkvatfallback.xml
+app/code/community/Redkiwi/Rkvatfallback/etc/system.xml app/code/community/Redkiwi/Rkvatfallback/etc/system.xml
+app/code/community/Redkiwi/Rkvatfallback/etc/config.xml app/code/community/Redkiwi/Rkvatfallback/etc/config.xml
+app/code/community/Redkiwi/Rkvatfallback/Helper/Data.php app/code/community/Redkiwi/Rkvatfallback/Helper/Data.php
