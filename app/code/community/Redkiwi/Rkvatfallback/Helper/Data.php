@@ -23,7 +23,7 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
 		$requestParams['requesterCountryCode'] = $requesterCountryCode;
 		$requestParams['requesterVatNumber'] = str_replace(array(' ', '-'), array('', ''), $requesterVatNumber);
 
-        $result = $gatewayResponse->getIsValid();
+                $result = $gatewayResponse->getIsValid();
 
 		// try the EU VIES website
 		if (!$result && Mage::getStoreConfig('customer/vat_services/vies_validation'))
@@ -58,11 +58,11 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
 				$gatewayResponse->setRequestSuccess(true);
 			}
 
-            $result = $gatewayResponse->getIsValid();
+                        $result = $gatewayResponse->getIsValid();
 		}
 		
 		// try the Isvat Appspot API
-        if (!$result && Mage::getStoreConfig('customer/vat_services/isvat_validation'))
+                if (!$result && Mage::getStoreConfig('customer/vat_services/isvat_validation'))
 		{
 			$vat_url = "http://isvat.appspot.com/{$requestParams['countryCode']}/{$requestParams['vatNumber']}/";
 			
@@ -88,17 +88,17 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
 				$gatewayResponse->setRequestSuccess(true);
 			}
 
-            $result = $gatewayResponse->getIsValid();
+                        $result = $gatewayResponse->getIsValid();
 		}
 
-        // Try regex
-        if (!$result && Mage::getStoreConfig('customer/vat_services/regex_validation'))
-        {
-            $gatewayResponse->setIsValid($this->vatRegexCheck($requestParams['vatNumber'], $requestParams['countryCode']));
-            $gatewayResponse->setRequestDate(date('Y/m/d H:i:s'));
-            $gatewayResponse->setRequestIdentifier('');
-            $gatewayResponse->setRequestSuccess(true);
-        }
+                // Try regex
+                if (!$result && Mage::getStoreConfig('customer/vat_services/regex_validation'))
+                {
+                    $gatewayResponse->setIsValid($this->vatRegexCheck($requestParams['vatNumber'], $requestParams['countryCode']));
+                    $gatewayResponse->setRequestDate(date('Y/m/d H:i:s'));
+                    $gatewayResponse->setRequestIdentifier('');
+                    $gatewayResponse->setRequestSuccess(true);
+                }
 		
 		return $gatewayResponse;
 	}
