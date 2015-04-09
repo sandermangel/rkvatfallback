@@ -83,7 +83,7 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
 				curl_close($ch);
 			}
 			
-			if (strstr($body, 'true'))
+			if (strstr($body, 'true') && !strstr($body, '<html'))
 			{
 				$gatewayResponse->setIsValid(true);
 				$gatewayResponse->setRequestDate(date('Y/m/d H:i:s'));
