@@ -15,96 +15,96 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
      */
     public function checkVatNumber($countryCode, $vatNumber, $requesterCountryCode = '', $requesterVatNumber = '')
     {
-		$gatewayResponse = parent::checkVatNumber($countryCode, $vatNumber, $requesterCountryCode, $requesterVatNumber);
-	
-		$requestParams = array();
-		$requestParams['countryCode'] = $countryCode;
-		$requestParams['vatNumber'] = str_replace(array(' ', '-'), array('', ''), $vatNumber);
-		$requestParams['requesterCountryCode'] = $requesterCountryCode;
-		$requestParams['requesterVatNumber'] = str_replace(array(' ', '-'), array('', ''), $requesterVatNumber);
+        $gatewayResponse = parent::checkVatNumber($countryCode, $vatNumber, $requesterCountryCode, $requesterVatNumber);
+    
+        $requestParams = array();
+        $requestParams['countryCode'] = $countryCode;
+        $requestParams['vatNumber'] = str_replace(array(' ', '-'), array('', ''), $vatNumber);
+        $requestParams['requesterCountryCode'] = $requesterCountryCode;
+        $requestParams['requesterVatNumber'] = str_replace(array(' ', '-'), array('', ''), $requesterVatNumber);
 
-                $result = $gatewayResponse->getIsValid();
+        $result = $gatewayResponse->getIsValid();
 
-		// try the EU VIES website
-		if (!$result && Mage::getStoreConfig('customer/vat_services/vies_validation'))
-		{
-			$vat_url = 'http://ec.europa.eu/taxation_customs/vies/viesquer.do?';
-			$vat_url .= http_build_query(array(
-                'ms'			=> $requestParams['countryCode'],
-                'iso'			=> $requestParams['countryCode'],
-                'vat'			=> $requestParams['vatNumber'],
+        // try the EU VIES website
+        if (!$result && Mage::getStoreConfig('customer/vat_services/vies_validation'))
+        {
+            $vat_url = 'http://ec.europa.eu/taxation_customs/vies/viesquer.do?';
+            $vat_url .= http_build_query(array(
+                'ms'            => $requestParams['countryCode'],
+                'iso'            => $requestParams['countryCode'],
+                'vat'            => $requestParams['vatNumber'],
                 'requesterMs'   => $requestParams['requesterCountryCode'],
                 'requesterIso'  => $requestParams['requesterCountryCode'],
                 'requesterVat'  => $requestParams['requesterVatNumber'],
-				'BtnSubmitVat'	=> 'Verify',
-			), '', '&');
-			
-			$body = '';
-			if ($ch = curl_init())
-			{
-				curl_setopt($ch, CURLOPT_URL, $vat_url);
-				curl_setopt($ch, CURLOPT_HEADER, 0);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-				curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+                'BtnSubmitVat'    => 'Verify',
+            ), '', '&');
+            
+            $body = '';
+            if ($ch = curl_init())
+            {
+                curl_setopt($ch, CURLOPT_URL, $vat_url);
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+                curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 
-				$body = curl_exec($ch);
-				curl_close($ch);
-			}
-			
-			if (strstr($body, '<span class="validStyle">'))
-			{
-				$gatewayResponse->setIsValid(true);
-				$gatewayResponse->setRequestDate(date('Y/m/d H:i:s'));
-				$gatewayResponse->setRequestIdentifier('');
-				$gatewayResponse->setRequestSuccess(true);
-			}
+                $body = curl_exec($ch);
+                curl_close($ch);
+            }
+            
+            if (strstr($body, '<span class="validStyle">'))
+            {
+                $gatewayResponse->setIsValid(true);
+                $gatewayResponse->setRequestDate(date('Y/m/d H:i:s'));
+                $gatewayResponse->setRequestIdentifier('');
+                $gatewayResponse->setRequestSuccess(true);
+            }
 
-                        $result = $gatewayResponse->getIsValid();
-		}
-		
-		// try the Isvat Appspot API
-                if (!$result && Mage::getStoreConfig('customer/vat_services/isvat_validation'))
-		{
-			$vat_url = "http://isvat.appspot.com/{$requestParams['countryCode']}/{$requestParams['vatNumber']}/";
-			
-			$body = '';
-			if ($ch = curl_init())
-			{
-				curl_setopt($ch, CURLOPT_URL, $vat_url);
-				curl_setopt($ch, CURLOPT_HEADER, 0);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-				curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+            $result = $gatewayResponse->getIsValid();
+        }
+        
+        // try the Isvat Appspot API
+        if (!$result && Mage::getStoreConfig('customer/vat_services/isvat_validation'))
+        {
+            $vat_url = "http://isvat.appspot.com/{$requestParams['countryCode']}/{$requestParams['vatNumber']}/";
+            
+            $body = '';
+            if ($ch = curl_init())
+            {
+                curl_setopt($ch, CURLOPT_URL, $vat_url);
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+                curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 
-				$body = curl_exec($ch);
-				curl_close($ch);
-			}
-			
-			if (strstr($body, 'true') && !strstr($body, '<html'))
-			{
-				$gatewayResponse->setIsValid(true);
-				$gatewayResponse->setRequestDate(date('Y/m/d H:i:s'));
-				$gatewayResponse->setRequestIdentifier('');
-				$gatewayResponse->setRequestSuccess(true);
-			}
+                $body = curl_exec($ch);
+                curl_close($ch);
+            }
+            
+            if (strstr($body, 'true') && !strstr($body, '<html'))
+            {
+                $gatewayResponse->setIsValid(true);
+                $gatewayResponse->setRequestDate(date('Y/m/d H:i:s'));
+                $gatewayResponse->setRequestIdentifier('');
+                $gatewayResponse->setRequestSuccess(true);
+            }
 
-                        $result = $gatewayResponse->getIsValid();
-		}
+            $result = $gatewayResponse->getIsValid();
+        }
 
-                // Try regex
-                if (!$result && Mage::getStoreConfig('customer/vat_services/regex_validation'))
-                {
-                    $gatewayResponse->setIsValid($this->vatRegexCheck($requestParams['vatNumber'], $requestParams['countryCode']));
-                    $gatewayResponse->setRequestDate(date('Y/m/d H:i:s'));
-                    $gatewayResponse->setRequestIdentifier('');
-                    $gatewayResponse->setRequestSuccess(true);
-                }
-		
-		return $gatewayResponse;
-	}
+        // Try regex
+        if (!$result && Mage::getStoreConfig('customer/vat_services/regex_validation'))
+        {
+            $gatewayResponse->setIsValid($this->vatRegexCheck($requestParams['vatNumber'], $requestParams['countryCode']));
+            $gatewayResponse->setRequestDate(date('Y/m/d H:i:s'));
+            $gatewayResponse->setRequestIdentifier('');
+            $gatewayResponse->setRequestSuccess(true);
+        }
+        
+        return $gatewayResponse;
+    }
 
     /**
      * Based on rules in http://ec.europa.eu/taxation_customs/vies/faqvies.do
