@@ -30,9 +30,12 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
 		{
 			$vat_url = 'http://ec.europa.eu/taxation_customs/vies/viesquer.do?';
 			$vat_url .= http_build_query(array(
-				'ms'			=> $requestParams['requesterCountryCode'],
-				'iso'			=> $requestParams['countryCode'],
-				'vat'			=> $requestParams['vatNumber'],
+                'ms'			=> $requestParams['countryCode'],
+                'iso'			=> $requestParams['countryCode'],
+                'vat'			=> $requestParams['vatNumber'],
+                'requesterMs'   => $requestParams['requesterCountryCode'],
+                'requesterIso'  => $requestParams['requesterCountryCode'],
+                'requesterVat'  => $requestParams['requesterVatNumber'],
 				'BtnSubmitVat'	=> 'Verify',
 			), '', '&');
 			
