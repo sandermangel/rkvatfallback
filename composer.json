@@ -1,0 +1,17 @@
+{
+    "name": "sandermangel/rkvatfallback",
+    "description": "VAT fallback extension for Magento",
+    "type": "magento-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Peter Jaap Blaakmeer",
+            "email": "peterjaap@elgentos.nl"
+        },
+        {
+            "name": "Sander Mangel",
+            "email": "sander@fitforme.nl"
+        }
+    ],
+    "require": {}
+}
