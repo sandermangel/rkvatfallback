@@ -30,8 +30,13 @@ class TestVatCheckCommand extends AbstractMagentoCommand
         if (!$this->initMagento()) return;
 
         $customer = \Mage::helper('customer');
-        $result = print_r($customer->checkVatNumber('LU', '26375245', 'LU', '26375245')->getData(), true);
 
+        $output->writeln('Testing valid number LU26375245');
+        $result = print_r($customer->checkVatNumber('LU', '26375245', 'LU', '26375245')->getData(), true);
+        $output->writeln($result);
+
+        $output->writeln('Testing invalid number NL123456789B01');
+        $result = print_r($customer->checkVatNumber('NL', '123456789B01', 'LU', '26375245')->getData(), true);
         $output->writeln($result);
     }
 }

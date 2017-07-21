@@ -14,6 +14,8 @@ Rkvatfallback adds extra check services to the VAT check of Magento by extending
 Tested on Mage CE 1.7.x, 1.8.x & 1.9.x
 
 # Changelog
+[0.3.1] Fixed modman file
+
 [0.3.0] Moved source files to src, added unit test in tests, moved shell script to magerun command, regex fix for ES and GB, added EL (Greece) country code
 
 [0.2.1] Fixed BE regex
