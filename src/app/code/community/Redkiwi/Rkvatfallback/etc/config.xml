@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Redkiwi_Rkvatfallback>
-            <version>0.2.0</version>
+            <version>0.3.0</version>
         </Redkiwi_Rkvatfallback>
     </modules>
 	
@@ -11,11 +11,11 @@
             <rkvatfallback>
                 <class>Redkiwi_Rkvatfallback_Helper</class>
             </rkvatfallback>
-			<customer>
-				<rewrite>
-					<data>Redkiwi_Rkvatfallback_Helper_Data</data>
-				</rewrite>
-			</customer>
+            <customer>
+                <rewrite>
+                    <data>Redkiwi_Rkvatfallback_Helper_Data</data>
+                </rewrite>
+            </customer>
         </helpers>
     </global>
 

@@ -111,8 +111,11 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
             case 'GR':
                 $regex = '/^[0-9]{9}$/';
                 break;
+            case 'EL':
+                $regex = '/^[0-9]{9}$/';
+                break;
             case 'ES':
-                $regex = '/^[0-9A-Z][0-9]{7}[0-9A-Z]$/';
+                $regex = '/^([a-zA-Z]\d{7}[0-9])|([0-9]\d{7}[a-zA-Z])|([a-zA-Z]\d{7}[0-9a-zA-Z])$/';
                 break;
             case 'FI':
                 $regex = '/^[0-9]{8}$/';
@@ -121,7 +124,7 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
                 $regex = '/^[0-9A-Z]{2}[0-9]{9}$/';
                 break;
             case 'GB':
-                $regex = '/^([0-9]{9}|[0-9]{12})~(GD|HA)[0-9]{3}$/';
+                $regex = '/^(([1-9]\d{8})|([1-9]\d{11})|(GD[1-9]\d{2})|(HA[1-9]\d{2}))$/';
                 break;
             case 'HU':
                 $regex = '/^[0-9]{8}$/';
@@ -168,7 +171,7 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
         }
 
         $vat = str_replace($country_iso, '', $requestParams['vatNumber']);
-        return (preg_match($regex,$vat));
+        return ((bool)preg_match($regex,$vat));
     }
 
     /**
