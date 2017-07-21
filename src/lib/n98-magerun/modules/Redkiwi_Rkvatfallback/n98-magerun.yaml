@@ -1,0 +1,6 @@
+autoloaders:
+  Redkiwi\Rkvatfallback: %module%/src
+
+commands:
+  customCommands:
+    - Redkiwi\Rkvatfallback\TestVatCheckCommand
