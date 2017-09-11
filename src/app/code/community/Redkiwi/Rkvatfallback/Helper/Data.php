@@ -93,6 +93,9 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
             case 'BE':
                 $regex = '/^[0]{0,1}[0-9]{9}$/';
                 break;
+            case 'BG':
+                $regex = '/^[0-9]{9,10}$/';
+                break;
             case 'CZ':
                 $regex = '/^[0-9]{8,10}$/';
                 break;
