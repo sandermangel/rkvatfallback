@@ -27,18 +27,21 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
             $gatewayResponse = new Varien_Object;
         }
 
+        $vatNumber = $this->cleanVatNumber($vatNumber);
+        $DateTimeStamp = new DateTimeImmutable();
+
         // Set request parameters for the various services
         $requestParams = array();
         $requestParams['countryCode'] = $countryCode;
-        $requestParams['vatNumber'] = str_replace(array(' ', '-'), array('', ''), $vatNumber);
+        $requestParams['vatNumber'] = $vatNumber;
         $requestParams['requesterCountryCode'] = $requesterCountryCode;
-        $requestParams['requesterVatNumber'] = str_replace(array(' ', '-'), array('', ''), $requesterVatNumber);
+        $requestParams['requesterVatNumber'] = $this->cleanVatNumber($requesterVatNumber);
 
         // try the vatlayer service (free up to 100 requests a month)
         if (!$result && Mage::getStoreConfig('customer/vat_services/vatlayer_validation'))
         {
             $gatewayResponse->setIsValid($this->vatlayerCheck($requestParams));
-            $gatewayResponse->setRequestDate(date('Y/m/d H:i:s'));
+            $gatewayResponse->setRequestDate($DateTimeStamp->format('Y/m/d H:i:s'));
             $gatewayResponse->setRequestIdentifier('');
             $gatewayResponse->setRequestSuccess(true);
             $gatewayResponse->setService('vatlayer');
@@ -50,7 +53,7 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
         if (!$result && Mage::getStoreConfig('customer/vat_services/vies_validation'))
         {
             $gatewayResponse->setIsValid($this->vatViesCheck($requestParams));
-            $gatewayResponse->setRequestDate(date('Y/m/d H:i:s'));
+            $gatewayResponse->setRequestDate($DateTimeStamp->format('Y/m/d H:i:s'));
             $gatewayResponse->setRequestIdentifier('');
             $gatewayResponse->setRequestSuccess(true);
             $gatewayResponse->setService('vies_custom');
@@ -61,120 +64,16 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
         // Try regex
         if ($this->forceRegexCheck || (!$result && Mage::getStoreConfig('customer/vat_services/regex_validation')))
         {
-            $gatewayResponse->setIsValid($this->vatRegexCheck($requestParams));
-            $gatewayResponse->setRequestDate(date('Y/m/d H:i:s'));
+            /** @var Redkiwi_Rkvatfallback_Model_Service_Regex $service */
+            $service = Mage::getModel('rkvatfallback/service_regex');
+            $gatewayResponse->setIsValid($service->validateVATNumber($vatNumber, $countryCode));
+            $gatewayResponse->setRequestDate($DateTimeStamp->format('Y/m/d H:i:s'));
             $gatewayResponse->setRequestIdentifier('');
             $gatewayResponse->setRequestSuccess(true);
             $gatewayResponse->setService('regex');
         }
         
         return $gatewayResponse;
-    }
-
-    /**
-     * Based on rules in http://ec.europa.eu/taxation_customs/vies/faqvies.do
-     * check if nif is valid
-     *
-     * Source; https://ellislab.com/forums/viewthread/159799
-     *
-     * @param array $requestParams
-     * @return boolean
-     */
-
-    public function vatRegexCheck($requestParams)
-    {
-        $country_iso = strtoupper($requestParams['countryCode']);
-
-        switch ($country_iso)
-        {
-            case 'AT':
-                $regex = '/^U[0-9]{8}$/';
-                break;
-            case 'BE':
-                $regex = '/^[0]{0,1}[0-9]{9}$/';
-                break;
-            case 'BG':
-                $regex = '/^[0-9]{9,10}$/';
-                break;
-            case 'CZ':
-                $regex = '/^[0-9]{8,10}$/';
-                break;
-            case 'DE':
-                $regex = '/^[0-9]{9}$/';
-                break;
-            case 'CY':
-                $regex = '/^[0-9]{8}[A-Z]$/';
-                break;
-            case 'DK':
-                $regex = '/^[0-9]{8}$/';
-                break;
-            case 'EE':
-                $regex = '/^[0-9]{9}$/';
-                break;
-            case 'GR':
-                $regex = '/^[0-9]{9}$/';
-                break;
-            case 'EL':
-                $regex = '/^[0-9]{9}$/';
-                break;
-            case 'ES':
-                $regex = '/^([a-zA-Z]\d{7}[0-9])|([0-9]\d{7}[a-zA-Z])|([a-zA-Z]\d{7}[0-9a-zA-Z])$/';
-                break;
-            case 'FI':
-                $regex = '/^[0-9]{8}$/';
-                break;
-            case 'FR':
-                $regex = '/^[0-9A-Z]{2}[0-9]{9}$/';
-                break;
-            case 'GB':
-                $regex = '/^(([1-9]\d{8})|([1-9]\d{11})|(GD[1-9]\d{2})|(HA[1-9]\d{2}))$/';
-                break;
-            case 'HU':
-                $regex = '/^[0-9]{8}$/';
-                break;
-            case 'IE':
-                $regex = '/^[0-9][A-Z0-9\\+\\*][0-9]{5}[A-Z]$/';
-                break;
-            case 'IT':
-                $regex = '/^[0-9]{11}$/';
-                break;
-            case 'LT':
-                $regex = '/^([0-9]{9}|[0-9]{12})$/';
-                break;
-            case 'LU':
-                $regex = '/^[0-9]{8}$/';
-                break;
-            case 'LV':
-                $regex = '/^[0-9]{11}$/';
-                break;
-            case 'MT':
-                $regex = '/^[0-9]{8}$/';
-                break;
-            case 'NL':
-                $regex = '/^[0-9]{9}B[0-9]{2}$/';
-                break;
-            case 'PL':
-                $regex = '/^[0-9]{10}$/';
-                break;
-            case 'PT':
-                $regex = '/^[0-9]{9}$/';
-                break;
-            case 'SE':
-                $regex = '/^[0-9]{12}$/';
-                break;
-            case 'SI':
-                $regex = '/^[0-9]{8}$/';
-                break;
-            case 'SK':
-                $regex = '/^[0-9]{10}$/';
-                break;
-            default:
-                return FALSE;
-                break;
-        }
-
-        $vat = str_replace($country_iso, '', $requestParams['vatNumber']);
-        return ((bool)preg_match($regex,$vat));
     }
 
     /**
@@ -255,5 +154,16 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
             }
         }
         return false;
+    }
+
+    /**
+     * Strip unwanted characters from the VAT number
+     *
+     * @param string $vatNumber
+     * @return string
+     */
+    public function cleanVatNumber(string $vatNumber)
+    {
+        return str_replace([' ', '-'], ['', ''], $vatNumber);
     }
 }
