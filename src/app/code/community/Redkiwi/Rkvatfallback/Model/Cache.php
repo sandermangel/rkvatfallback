@@ -16,9 +16,11 @@ class Redkiwi_Rkvatfallback_Model_Cache
      */
     public function save($vatNumber, $request)
     {
-        $expiration = (new \DateTimeImmutable())->add(new \DateInterval('P1D'));
+        if ($this->useCache()) {
+            $expiration = (new \DateTimeImmutable())->add(new \DateInterval('P1D'));
 
-        Mage::app()->saveCache(serialize($request), 'rkvatfallback_validated_'.$vatNumber, ['VATVALIDATION_CACHE'], $expiration->getTimestamp());
+            Mage::app()->saveCache(serialize($request), 'rkvatfallback_validated_'.$vatNumber, ['VATVALIDATION_CACHE'], $expiration->getTimestamp());
+        }
     }
 
     /**
@@ -27,7 +29,7 @@ class Redkiwi_Rkvatfallback_Model_Cache
      */
     public function hasHit($vatNumber)
     {
-        return (bool)Mage::app()->getCache()->load('rkvatfallback_validated_'.$vatNumber);
+        return (bool)$this->useCache() && Mage::app()->getCache()->load('rkvatfallback_validated_'.$vatNumber);
     }
 
     /**
