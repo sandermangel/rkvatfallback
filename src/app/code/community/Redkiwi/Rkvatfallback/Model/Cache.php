@@ -14,7 +14,7 @@ class Redkiwi_Rkvatfallback_Model_Cache
      * @param string $vatNumber
      * @param Varien_Object $request
      */
-    public function save($vatNumber, $request)
+    public function save($vatNumber, Varien_Object $request)
     {
         if ($this->useCache()) {
             $expiration = (new \DateTimeImmutable())->add(new \DateInterval('P1D'));
@@ -29,7 +29,7 @@ class Redkiwi_Rkvatfallback_Model_Cache
      */
     public function hasHit($vatNumber)
     {
-        return (bool)$this->useCache() && Mage::app()->getCache()->load('rkvatfallback_validated_'.$vatNumber);
+        return (bool)$this->useCache() && Mage::app()->loadCache('rkvatfallback_validated_'.$vatNumber);
     }
 
     /**
@@ -38,11 +38,11 @@ class Redkiwi_Rkvatfallback_Model_Cache
      */
     public function get($vatNumber)
     {
-        $serializedObject = Mage::app()->getCache()->load('rkvatfallback_validated_'.$vatNumber);
+        $serializedObject = Mage::app()->loadCache('rkvatfallback_validated_'.$vatNumber);
 
         $unserializedObject = new Varien_Object();
         if (is_string($serializedObject)) {
-            $unserializedObject = unserialize($serializedObject, ['Varien_Object']);
+            $unserializedObject = unserialize($serializedObject);
         }
 
         return $unserializedObject;
