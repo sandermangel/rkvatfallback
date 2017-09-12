@@ -22,6 +22,16 @@
                 <class>Redkiwi_Rkvatfallback_Model</class>
             </rkvatfallback>
         </models>
+
+        <cache>
+            <types>
+                <rkvatfallback translate="label,description" module="rkvatfallback">
+                    <label>VAT cache</label>
+                    <description>VAT validation requests tag</description>
+                    <tags>VATVALIDATION_CACHE</tags>
+                </rkvatfallback>
+            </types>
+        </cache>
     </global>
 
     <default>
