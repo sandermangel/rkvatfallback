@@ -59,7 +59,7 @@ class Redkiwi_Rkvatfallback_Model_Validator
         // try the EU VIES website
         if ($this->config->getConfigUseVies()) {
             /** @var Redkiwi_Rkvatfallback_Model_Service_Vies $service */
-            $service = Mage::getModel('rkvatfallback/service_vies');
+            $service = Mage::getModel('rkvatfallback/service_vies', $this->container);
             $gatewayResponse->setIsValid($service->validateVATNumber($vatNumber, $countryCode));
             $gatewayResponse->setService('vies_custom');
 
