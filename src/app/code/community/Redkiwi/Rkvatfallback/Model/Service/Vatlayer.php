@@ -2,7 +2,19 @@
 
 class Redkiwi_Rkvatfallback_Model_Service_Vatlayer implements Redkiwi_Rkvatfallback_Model_Service_ServiceInterface
 {
-    const VATLAYER_BASE_URL = 'http://apilayer.net/api/';
+    /**
+     * @var Redkiwi_Rkvatfallback_Helper_Data
+     */
+    protected $config;
+
+    /**
+     * Redkiwi_Rkvatfallback_Model_Validator constructor.
+     * @param Redkiwi_Rkvatfallback_Model_DiContainer $container
+     */
+    public function __construct($container)
+    {
+        $this->config = $container->get('config');
+    }
 
     /**
      * @param string $vatNumber
@@ -11,7 +23,7 @@ class Redkiwi_Rkvatfallback_Model_Service_Vatlayer implements Redkiwi_Rkvatfallb
      */
     public function validateVATNumber(string $vatNumber, string $countryIso2)
     {
-        if(!$accessKey = Mage::helper('rkvatfallback')->getConfigVatLayerApiToken()) { // no api token set in config
+        if(!$accessKey = $this->config->getConfigVatLayerApiToken()) { // no api token set in config
             return false;
         }
 

@@ -21,7 +21,10 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
             }
         }
 
-        return Mage::getModel('rkvatfallback/validator')->validateVatNumber($countryCode, $vatNumber);
+        $diContainer = Mage::getModel('rkvatfallback/diContainer', [
+            'config' => $this
+        ]);
+        return Mage::getModel('rkvatfallback/validator', $diContainer)->validateVatNumber($countryCode, $vatNumber);
     }
 
     /**

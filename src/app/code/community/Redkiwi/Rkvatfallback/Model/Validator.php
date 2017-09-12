@@ -2,6 +2,24 @@
 
 class Redkiwi_Rkvatfallback_Model_Validator
 {
+    /**
+     * @var Redkiwi_Rkvatfallback_Model_DiContainer
+     */
+    protected $container;
+    /**
+     * @var Redkiwi_Rkvatfallback_Helper_Data
+     */
+    protected $config;
+
+    /**
+     * Redkiwi_Rkvatfallback_Model_Validator constructor.
+     * @param Redkiwi_Rkvatfallback_Model_DiContainer $container
+     */
+    public function __construct($container)
+    {
+        $this->container = $container;
+        $this->config = $container->get('config');
+    }
 
     /**
      * @param $countryCode
@@ -11,9 +29,6 @@ class Redkiwi_Rkvatfallback_Model_Validator
      */
     public function validateVatNumber($countryCode, $vatNumber)
     {
-        /** @var Redkiwi_Rkvatfallback_Helper_Data $helper */
-        $helper = Mage::helper('rkvatfallback');
-
         $gatewayResponse = new Varien_Object([
             'request_data' => (new DateTimeImmutable())->format('Y/m/d H:i:s'),
             'request_identifier' => '',
@@ -23,9 +38,9 @@ class Redkiwi_Rkvatfallback_Model_Validator
         $vatNumber = $this->cleanVatNumber($vatNumber, $countryCode);
 
         // try the vatlayer service (free up to 100 requests a month)
-        if ($helper->getConfigUseVatLayer()) {
+        if ($this->config->getConfigUseVatLayer()) {
             /** @var Redkiwi_Rkvatfallback_Model_Service_Vatlayer $service */
-            $service = Mage::getModel('rkvatfallback/service_vatlayer');
+            $service = Mage::getModel('rkvatfallback/service_vatlayer', $this->container);
             $gatewayResponse->setIsValid($service->validateVATNumber($vatNumber, $countryCode));
             $gatewayResponse->setService('vatlayer');
 
@@ -35,7 +50,7 @@ class Redkiwi_Rkvatfallback_Model_Validator
         }
 
         // try the EU VIES website
-        if ($helper->getConfigUseVies()) {
+        if ($this->config->getConfigUseVies()) {
             /** @var Redkiwi_Rkvatfallback_Model_Service_Vies $service */
             $service = Mage::getModel('rkvatfallback/service_vies');
             $gatewayResponse->setIsValid($service->validateVATNumber($vatNumber, $countryCode));
