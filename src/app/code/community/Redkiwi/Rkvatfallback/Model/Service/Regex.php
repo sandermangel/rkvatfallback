@@ -11,9 +11,7 @@ class Redkiwi_Rkvatfallback_Model_Service_Regex implements Redkiwi_Rkvatfallback
     {
         $regex = $this->getRegexMapping($countryIso2);
 
-        $vatNrWithoutCountry = str_replace($countryIso2, '', $vatNumber);
-
-        return (bool)preg_match($regex, $vatNrWithoutCountry);
+        return (bool)preg_match($regex, $vatNumber);
     }
 
     /**
