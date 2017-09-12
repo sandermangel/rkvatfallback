@@ -14,7 +14,7 @@ class Redkiwi_Rkvatfallback_Model_Cache
      * @param string $vatNumber
      * @param Varien_Object $request
      */
-    public function save(string $vatNumber, Varien_Object $request)
+    public function save($vatNumber, $request)
     {
         $expiration = (new \DateTimeImmutable())->add(new \DateInterval('P1D'));
 
@@ -25,7 +25,7 @@ class Redkiwi_Rkvatfallback_Model_Cache
      * @param string $vatNumber
      * @return bool
      */
-    public function hasHit(string $vatNumber)
+    public function hasHit($vatNumber)
     {
         return (bool)Mage::app()->getCache()->load('rkvatfallback_validated_'.$vatNumber);
     }
@@ -34,7 +34,7 @@ class Redkiwi_Rkvatfallback_Model_Cache
      * @param string $vatNumber
      * @return Varien_Object
      */
-    public function get(string $vatNumber)
+    public function get($vatNumber)
     {
         $serializedObject = Mage::app()->getCache()->load('rkvatfallback_validated_'.$vatNumber);
 

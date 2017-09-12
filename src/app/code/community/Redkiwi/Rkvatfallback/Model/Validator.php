@@ -87,7 +87,7 @@ class Redkiwi_Rkvatfallback_Model_Validator
      * @param string $countryCode
      * @return string
      */
-    public function cleanVatNumber(string $vatNumber, string $countryCode)
+    public function cleanVatNumber($vatNumber, $countryCode)
     {
         $vatNrWithoutCountry = str_replace($countryCode,  '', $vatNumber);
 
