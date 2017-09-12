@@ -11,7 +11,7 @@ class Redkiwi_Rkvatfallback_Model_Service_Vatlayer implements Redkiwi_Rkvatfallb
      */
     public function validateVATNumber(string $vatNumber, string $countryIso2)
     {
-        if(!$accessKey = $this->getApiToken()) { // no api token set in config
+        if(!$accessKey = Mage::helper('rkvatfallback')->getConfigVatLayerApiToken()) { // no api token set in config
             return false;
         }
 
@@ -40,15 +40,5 @@ class Redkiwi_Rkvatfallback_Model_Service_Vatlayer implements Redkiwi_Rkvatfallb
         }
 
         return false;
-    }
-
-    /**
-     * Get the API token from the config
-     *
-     * @return string
-     */
-    public function getApiToken()
-    {
-        return Mage::getStoreConfig('customer/vat_services/vatlayer_accesskey');
     }
 }
