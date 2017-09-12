@@ -50,4 +50,24 @@ class Redkiwi_Rkvatfallback_Helper_Data extends Mage_Customer_Helper_Data
     {
         return Mage::getStoreConfig('customer/vat_services/vatlayer_accesskey');
     }
+
+    /**
+     * Get the webshops country
+     *
+     * @return string
+     */
+    public function getConfigMerchantCountry()
+    {
+        return Mage::helper('core')->getMerchantCountryCode();
+    }
+
+    /**
+     * Get the webshops VAT number
+     *
+     * @return string
+     */
+    public function getConfigMerchantVat()
+    {
+        return Mage::helper('core')->getMerchantVatNumber();
+    }
 }

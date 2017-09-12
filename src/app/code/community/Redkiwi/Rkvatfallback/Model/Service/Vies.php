@@ -3,6 +3,20 @@
 class Redkiwi_Rkvatfallback_Model_Service_Vies implements Redkiwi_Rkvatfallback_Model_Service_ServiceInterface
 {
     /**
+     * @var Redkiwi_Rkvatfallback_Helper_Data
+     */
+    protected $config;
+
+    /**
+     * Redkiwi_Rkvatfallback_Model_Validator constructor.
+     * @param Redkiwi_Rkvatfallback_Model_DiContainer $container
+     */
+    public function __construct($container)
+    {
+        $this->config = $container->get('config');
+    }
+
+    /**
      * @param string $vatNumber
      * @param string $countryIso2
      * @return bool
@@ -13,9 +27,9 @@ class Redkiwi_Rkvatfallback_Model_Service_Vies implements Redkiwi_Rkvatfallback_
                 'ms' => $countryIso2,
                 'iso' => $countryIso2,
                 'vat' => $countryIso2 . $vatNumber,
-                'requesterMs' => $this->getConfigMerchantCountry(),
-                'requesterIso' => $this->getConfigMerchantCountry(),
-                'requesterVat' => $this->getConfigMerchantVat(),
+                'requesterMs' => $this->config->getConfigMerchantCountry(),
+                'requesterIso' => $this->config->getConfigMerchantCountry(),
+                'requesterVat' => $this->config->getConfigMerchantVat(),
                 'BtnSubmitVat' => 'Verify',
             ], '', '&'));
 
@@ -40,25 +54,5 @@ class Redkiwi_Rkvatfallback_Model_Service_Vies implements Redkiwi_Rkvatfallback_
         }
 
         return false;
-    }
-
-    /**
-     * Get the webshops country
-     *
-     * @return string
-     */
-    public function getConfigMerchantCountry()
-    {
-        return Mage::helper('core')->getMerchantCountryCode();
-    }
-
-    /**
-     * Get the webshops VAT number
-     *
-     * @return string
-     */
-    public function getConfigMerchantVat()
-    {
-        return Mage::helper('core')->getMerchantVatNumber();
     }
 }
