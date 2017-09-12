@@ -39,7 +39,7 @@ class Redkiwi_Rkvatfallback_Model_Validator
 
         /** @var Redkiwi_Rkvatfallback_Model_Cache $cache */
         $cache = Mage::getModel('rkvatfallback/cache');
-        if ($cache->hasHit($countryCode.$vatNumber)) {
+        if ($cache->useCache() && $cache->hasHit($countryCode.$vatNumber)) {
             return $cache->get($countryCode.$vatNumber);
         }
 
