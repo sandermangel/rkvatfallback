@@ -1,10 +1,8 @@
 <?php
 
-require_once 'src/app/code/community/Redkiwi/Rkvatfallback/Helper/Data.php';
+require_once __DIR__ . '/../src/app/code/community/Redkiwi/Rkvatfallback/Model/Service/Regex.php';
 
 use PHPUnit\Framework\TestCase;
-
-class Mage_Customer_Helper_Data {}
 
 class RegexTest extends TestCase
 {
@@ -85,9 +83,9 @@ class RegexTest extends TestCase
             );
         }
 
-        $data = new Redkiwi_Rkvatfallback_Helper_Data;
+        $data = new Redkiwi_Rkvatfallback_Model_Service_Regex;
         foreach ($numbersToCheckSplitUp as $numberToCheck) {
-            $this->assertTrue($data->vatRegexCheck($numberToCheck), 'VAT number ' . implode('', $numberToCheck) . ' is invalid while it was expected to be valid.');
+            $this->assertTrue($data->validateVATNumber($numberToCheck['vatNumber'], $numberToCheck['countryCode']), 'VAT number ' . implode('', $numberToCheck) . ' is invalid while it was expected to be valid.');
         }
 
     }
@@ -199,9 +197,9 @@ class RegexTest extends TestCase
             );
         }
 
-        $data = new Redkiwi_Rkvatfallback_Helper_Data;
+        $data = new Redkiwi_Rkvatfallback_Model_Service_Regex;
         foreach ($numbersToCheckSplitUp as $numberToCheck) {
-            $this->assertFalse($data->vatRegexCheck($numberToCheck), 'VAT number ' . implode('', $numberToCheck) . ' is valid while it was expected to be invalid.');
+            $this->assertFalse($data->validateVATNumber($numberToCheck['vatNumber'], $numberToCheck['countryCode']), 'VAT number ' . implode('', $numberToCheck) . ' is valid while it was expected to be invalid.');
         }
     }
 

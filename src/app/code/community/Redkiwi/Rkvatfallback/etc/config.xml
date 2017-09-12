@@ -17,6 +17,11 @@
                 </rewrite>
             </customer>
         </helpers>
+        <models>
+            <rkvatfallback>
+                <class>Redkiwi_Rkvatfallback_Model</class>
+            </rkvatfallback>
+        </models>
     </global>
 
     <default>
