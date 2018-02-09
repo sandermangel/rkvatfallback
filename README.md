@@ -13,6 +13,9 @@ Rkvatfallback adds extra check services to the VAT check of Magento by extending
 
 Tested on Mage CE 1.7.x, 1.8.x & 1.9.x
 
+# Magento 2
+The Magento 2 version is currently under development here: [https://github.com/Dutchento/m2-vatfallback](https://github.com/Dutchento/m2-vatfallback)
+
 # Changelog
 [0.3.1] Fixed modman file
 
