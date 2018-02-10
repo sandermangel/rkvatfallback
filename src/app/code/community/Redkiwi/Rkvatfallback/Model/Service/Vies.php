@@ -21,7 +21,7 @@ class Redkiwi_Rkvatfallback_Model_Service_Vies implements Redkiwi_Rkvatfallback_
      * @param string $countryIso2
      * @return bool
      */
-    public function validateVATNumber(string $vatNumber, string $countryIso2)
+    public function validateVATNumber($vatNumber, $countryIso2)
     {
         $curlHandle = curl_init('http://ec.europa.eu/taxation_customs/vies/viesquer.do?' . http_build_query([
                 'ms' => $countryIso2,

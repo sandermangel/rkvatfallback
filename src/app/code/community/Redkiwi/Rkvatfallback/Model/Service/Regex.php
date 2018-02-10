@@ -7,7 +7,7 @@ class Redkiwi_Rkvatfallback_Model_Service_Regex implements Redkiwi_Rkvatfallback
      * @param string $countryIso2
      * @return bool
      */
-    public function validateVATNumber(string $vatNumber, string $countryIso2)
+    public function validateVATNumber($vatNumber, $countryIso2)
     {
         $regex = $this->getRegexMapping($countryIso2);
 
@@ -23,7 +23,7 @@ class Redkiwi_Rkvatfallback_Model_Service_Regex implements Redkiwi_Rkvatfallback
      * @param string $countryIso2
      * @return string
      */
-    public function getRegexMapping(string $countryIso2)
+    public function getRegexMapping($countryIso2)
     {
         $mapping =  [
             'AT' => '/^U[0-9]{8}$/',

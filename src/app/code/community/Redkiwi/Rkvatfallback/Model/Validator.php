@@ -37,6 +37,12 @@ class Redkiwi_Rkvatfallback_Model_Validator
 
         $vatNumber = $this->cleanVatNumber($vatNumber, $countryCode);
 
+        /** @var Redkiwi_Rkvatfallback_Model_Cache $cache */
+        $cache = Mage::getModel('rkvatfallback/cache');
+        if ($cache->hasHit($countryCode.$vatNumber)) {
+            return $cache->get($countryCode.$vatNumber);
+        }
+
         // try the vatlayer service (free up to 100 requests a month)
         if ($this->config->getConfigUseVatLayer()) {
             /** @var Redkiwi_Rkvatfallback_Model_Service_Vatlayer $service */
@@ -45,6 +51,7 @@ class Redkiwi_Rkvatfallback_Model_Validator
             $gatewayResponse->setService('vatlayer');
 
             if ($gatewayResponse->getIsValid()) { // VAT nr was validated
+                $cache->save($countryCode.$vatNumber, $gatewayResponse);
                 return $gatewayResponse;
             }
         }
@@ -52,11 +59,12 @@ class Redkiwi_Rkvatfallback_Model_Validator
         // try the EU VIES website
         if ($this->config->getConfigUseVies()) {
             /** @var Redkiwi_Rkvatfallback_Model_Service_Vies $service */
-            $service = Mage::getModel('rkvatfallback/service_vies');
+            $service = Mage::getModel('rkvatfallback/service_vies', $this->container);
             $gatewayResponse->setIsValid($service->validateVATNumber($vatNumber, $countryCode));
             $gatewayResponse->setService('vies_custom');
 
             if ($gatewayResponse->getIsValid()) { // VAT nr was validated
+                $cache->save($countryCode.$vatNumber, $gatewayResponse);
                 return $gatewayResponse;
             }
         }
@@ -65,6 +73,8 @@ class Redkiwi_Rkvatfallback_Model_Validator
         $service = Mage::getModel('rkvatfallback/service_regex');
         $gatewayResponse->setIsValid($service->validateVATNumber($vatNumber, $countryCode));
         $gatewayResponse->setService('regex');
+
+        $cache->save($countryCode.$vatNumber, $gatewayResponse);
 
         return $gatewayResponse;
     }
@@ -77,7 +87,7 @@ class Redkiwi_Rkvatfallback_Model_Validator
      * @param string $countryCode
      * @return string
      */
-    public function cleanVatNumber(string $vatNumber, string $countryCode)
+    public function cleanVatNumber($vatNumber, $countryCode)
     {
         $vatNrWithoutCountry = str_replace($countryCode,  '', $vatNumber);
 

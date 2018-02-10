@@ -21,7 +21,7 @@ class Redkiwi_Rkvatfallback_Model_Service_Vatlayer implements Redkiwi_Rkvatfallb
      * @param string $countryIso2
      * @return bool
      */
-    public function validateVATNumber(string $vatNumber, string $countryIso2)
+    public function validateVATNumber($vatNumber, $countryIso2)
     {
         if(!$accessKey = $this->config->getConfigVatLayerApiToken()) { // no api token set in config
             return false;

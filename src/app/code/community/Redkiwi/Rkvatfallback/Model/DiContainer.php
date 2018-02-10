@@ -11,7 +11,7 @@ class Redkiwi_Rkvatfallback_Model_DiContainer
      */
     protected $services;
 
-    public function __construct(array $services)
+    public function __construct($services)
     {
         $this->services = $services;
     }
@@ -25,7 +25,7 @@ class Redkiwi_Rkvatfallback_Model_DiContainer
      *
      * @return mixed Entry.
      */
-    public function get(string $id)
+    public function get($id)
     {
         if (!$this->has($id)) {
             throw new \Exception('Error while retrieving the entry');
@@ -45,7 +45,7 @@ class Redkiwi_Rkvatfallback_Model_DiContainer
      *
      * @return bool
      */
-    public function has(string $id)
+    public function has($id)
     {
         return isset($this->services[$id]);
     }
