@@ -48,11 +48,15 @@ class Redkiwi_Rkvatfallback_Model_Service_Vies implements Redkiwi_Rkvatfallback_
         $body = curl_exec($curlHandle);
         curl_close($curlHandle);
 
-        // body of API contains a valid flag
-        if(false !== strpos($body, 'validStyle')) {
-            return true;
+        // Check the text returned. Note: this can change so should be checked
+        $isValid = null;
+        $validNumber = strpos($body, 'Yes, valid VAT number');
+        $invalidNumber = strpos($body, 'No, invalid VAT number');
+
+        if ($validNumber !== false || $invalidNumber !== false) {
+            $isValid = $validNumber ? true : false;
         }
 
-        return false;
+        return $isValid;
     }
 }
